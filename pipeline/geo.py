@@ -15,6 +15,9 @@ FICHIERS = {
     'insee/v_region_2026.csv': COG.format('v_region_2026.csv'),
     'insee/ZE2020_au_01-01-2026.zip': 'https://www.insee.fr/fr/statistiques/fichier/4652957/ZE2020_au_01-01-2026.zip',
     'insee/EPCI_au_01-01-2026.zip': 'https://www.insee.fr/fr/statistiques/fichier/2510634/EPCI_au_01-01-2026.zip',
+    # ANCT, programme Territoires d'industrie 2023-2027, « Liste des communes couvertes 2023-2027 (COG 2026) »
+    # (https://www.data.gouv.fr/datasets/programme-territoires-dindustrie, ressource mise à jour le 21 août 2026)
+    'anct/ti_2023_2027_communes_cog.csv': 'https://static.data.gouv.fr/resources/programme-territoires-dindustrie/20260821-093025/liste-ti-com2025-20260206.csv',
 }
 
 def fichier(rel):
@@ -75,12 +78,12 @@ def referentiel():
     ze = _xlsx_zip(fichier('insee/ZE2020_au_01-01-2026.zip'), 'Composition_communale')[['CODGEO', 'LIBGEO', 'ZE2020', 'LIBZE2020', 'DEP', 'REG']]
     ep = _xlsx_zip(fichier('insee/EPCI_au_01-01-2026.zip'), 'Composition_communale')[['CODGEO', 'EPCI', 'LIBEPCI']]
     ref = ze.merge(ep, on='CODGEO', how='left')
-    ti_p = CACHE / 'anct/ti_2023_2027_communes_cog.csv'
-    if ti_p.exists():
-        ti = pd.read_csv(ti_p, dtype=str)
-        ti['CODGEO'] = vers_cog2026(ti.insee_com).values
-        ti = ti.dropna(subset=['CODGEO']).drop_duplicates('CODGEO')[['CODGEO', 'id_ti', 'lib_ti']]
-        ref = ref.merge(ti, on='CODGEO', how='left')
+    # Territoires d'industrie : fichier téléchargé comme les autres (il n'était lu que s'il se trouvait déjà dans le cache,
+    # ce qui faisait échouer l'assemblage sur une machine neuve).
+    ti = pd.read_csv(fichier('anct/ti_2023_2027_communes_cog.csv'), dtype=str)
+    ti['CODGEO'] = vers_cog2026(ti.insee_com).values
+    ti = ti.dropna(subset=['CODGEO']).drop_duplicates('CODGEO')[['CODGEO', 'id_ti', 'lib_ti']]
+    ref = ref.merge(ti, on='CODGEO', how='left')
     return ref
 
 def libelles_niveaux():
