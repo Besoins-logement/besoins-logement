@@ -144,6 +144,15 @@ main:focus { outline: none; }
 /* Le texte occupe toute la largeur de son cartouche : jamais de colonne étroite collée à gauche d'un grand cartouche vide. */
 .texte p, .texte li { max-width: none; }
 
+/* Texte courant justifié (marges droites alignées), avec coupure des mots en fin de ligne (langue de la page : fr)
+   pour éviter les grands espaces. Les libellés courts (chiffres, boutons, tableaux, titres) restent alignés à gauche.
+   Sur téléphone (colonnes étroites), le texte reste aligné à gauche : justifié, il ouvrirait de grands blancs entre les mots. */
+@media (min-width: 700px) {
+  .chapo, .texte p, .texte li, .regles dd, .note, .aide, .etapes p, .ind-def p, details.def p, .alerte, .pied p, .graphique .sous-titre, .vide-message {
+    text-align: justify; -webkit-hyphens: auto; hyphens: auto; hyphenate-limit-chars: 7 3 3;
+  }
+}
+
 /* Cartouche de lecture longue (Méthode, Formats) : le titre dans une colonne étroite à gauche, le texte à droite,
    pour garder des lignes lisibles tout en occupant la largeur. */
 @media (min-width: 1000px) {
@@ -213,7 +222,8 @@ input::placeholder { color: #8C8F94; }
 }
 @media (max-width: 1000px) { .hero { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 600px) { .hero { padding: var(--e-5) var(--e-4); } }
-.hero h1 { margin-top: var(--e-2); }
+.hero h1 { margin-top: var(--e-2); margin-bottom: var(--e-4); }
+.h1-suite { display: block; margin-top: var(--e-2); font-size: var(--t-xl); font-weight: 400; color: var(--gris); letter-spacing: 0; }
 .hero .chapo { max-width: none; margin-bottom: var(--e-4); }
 .surtitre { text-transform: uppercase; letter-spacing: .08em; font-size: var(--t-xs); font-weight: 700; color: var(--texte-discret); margin: 0; }
 .maj { font-size: var(--t-s); color: var(--texte-discret); }
