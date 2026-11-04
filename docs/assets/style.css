@@ -104,13 +104,12 @@ q { quotes: "«\00a0" "\00a0»" "“" "”"; }
 .entete::before { content: ""; position: absolute; border-radius: 50%; pointer-events: none; width: 220px; height: 220px; right: -80px; top: -150px; background: rgba(151, 195, 61, .14); }
 .entete-ligne { display: flex; align-items: center; justify-content: space-between; gap: var(--e-3); padding-top: var(--e-4); padding-bottom: var(--e-2); position: relative; z-index: 1; }
 .marque { display: inline-flex; align-items: center; gap: var(--e-3); text-decoration: none; color: var(--gris); min-width: 0; }
-.marque-cercles { position: relative; width: 36px; height: 32px; flex: none; }
-.marque-cercles span { position: absolute; border-radius: 50%; }
-.marque-cercles span:first-child { width: 27px; height: 27px; left: 0; bottom: 0; background: var(--vert); }
-.marque-cercles span:last-child { width: 17px; height: 17px; right: 0; top: 0; background: var(--turquoise); opacity: .9; }
-.marque-texte { font-size: var(--t-l); line-height: 1.3; }
-.marque-titre { font-weight: 700; }
-.marque-sous-titre { color: var(--texte-discret); }
+/* Logo : une maison dont l'intérieur est un petit graphique en barres (le logement mesuré par les données),
+   dans un cercle vert, avec un cercle turquoise en écho au motif de la charte. */
+.marque-logo { width: 44px; height: 44px; flex: none; display: block; }
+.marque-texte { display: flex; flex-direction: column; line-height: 1.25; }
+.marque-titre { font-weight: 700; font-size: var(--t-l); }
+.marque-sous-titre { color: var(--texte-discret); font-size: var(--t-s); }
 .menu { position: relative; z-index: 1; }
 .menu ul { list-style: none; margin: 0; padding: 0 0 var(--e-3); display: flex; flex-wrap: wrap; gap: var(--e-1); }
 .menu a {
@@ -131,8 +130,12 @@ q { quotes: "«\00a0" "\00a0»" "“" "”"; }
   .menu.ouvert { display: block; }
   .menu ul { flex-direction: column; gap: 2px; padding-bottom: var(--e-3); }
   .menu a { white-space: normal; font-size: var(--t-m); }
-  .marque-texte { font-size: var(--t-m); }
-  .marque-sous-titre { display: block; font-size: var(--t-s); }
+  .marque-logo { width: 38px; height: 38px; }
+  .marque-titre { font-size: var(--t-m); }
+  .marque-sous-titre { font-size: var(--t-xs); }
+}
+@media (max-width: 480px) {
+  .marque-sous-titre { display: none; }
 }
 
 main { display: block; padding-bottom: var(--e-7); min-height: 60vh; }
