@@ -75,12 +75,8 @@
 
   <h2 class="puce">Le besoin en logement en France</h2>
   <div class="besoin-france carte" id="acc-besoin" aria-busy="true">
-    <div class="besoin-hero">
-      <p class="besoin-hero-libelle">Besoin en construction par an, de 2030 à 2040</p>
-      <p class="besoin-hero-valeur"><span id="acc-besoin-valeur" class="chargement">Chargement des données...</span></p>
-      <p class="besoin-hero-unite">logements à construire chaque année en France</p>
-    </div>
     <div class="besoin-details">
+      <div class="besoin-carte besoin-principal"><p class="chiffre-valeur"><span id="acc-besoin-valeur" class="chargement">Chargement...</span></p><p class="chiffre-libelle">logements à construire chaque année en France, de 2030 à 2040 (besoin en construction)</p></div>
       <div class="besoin-carte"><p class="chiffre-valeur" id="acc-construction">...</p><p class="chiffre-libelle">logements mis en chantier par an aujourd'hui (moyenne 2023 à 2025, hors Mayotte)</p></div>
       <div class="besoin-carte"><p class="chiffre-valeur" id="acc-couverture">...</p><p class="chiffre-libelle">du besoin couvert par la construction actuelle</p></div>
       <div class="besoin-carte"><p class="chiffre-valeur" id="acc-departements">...</p><p class="chiffre-libelle">départements où la construction actuelle ne couvre pas le besoin</p></div>
@@ -121,23 +117,24 @@
   <div class="alerte" id="ex-alerte" role="alert" hidden></div>
 
   <form id="ex-form" class="ex-grille" novalidate>
-    <div class="ex-col">
     <fieldset class="carte etape ex-etape1">
       <legend><span class="num-etape" aria-hidden="true">1</span>Thème et niveau</legend>
-      <div class="champ">
-        <label for="ex-theme">Thème</label>
-        <select id="ex-theme"><option value="">Chargement...</option></select>
-      </div>
-      <div class="champ">
-        <label for="ex-niveau">Niveau géographique</label>
-        <select id="ex-niveau"></select>
+      <div class="champs-ligne champs-2">
+        <div class="champ">
+          <label for="ex-theme">Thème</label>
+          <select id="ex-theme"><option value="">Chargement...</option></select>
+        </div>
+        <div class="champ">
+          <label for="ex-niveau">Niveau géographique</label>
+          <select id="ex-niveau"></select>
+        </div>
       </div>
     </fieldset>
 
     <fieldset class="carte etape ex-etape2">
       <legend><span class="num-etape" aria-hidden="true">2</span>Territoires</legend>
       <p class="aide" id="ex-geo-aide"></p>
-      <div class="champs-2">
+      <div class="champs-ligne champs-4">
         <div class="champ" id="ex-reg-champ">
           <label for="ex-reg">Région</label>
           <select id="ex-reg"><option value="">Toutes les régions</option></select>
@@ -146,33 +143,32 @@
           <label for="ex-dep">Département</label>
           <select id="ex-dep"><option value="">Tous les départements</option></select>
         </div>
-      </div>
-      <div class="champ" id="ex-epci-champ">
-        <label for="ex-epci">Intercommunalité (EPCI)</label>
-        <select id="ex-epci"><option value="">Toutes les intercommunalités</option></select>
-      </div>
-      <div class="champ" id="ex-nom-champ">
-        <label for="ex-nom">Nom contenant</label>
-        <input id="ex-nom" type="search" autocomplete="off" spellcheck="false" placeholder="Par exemple : Saint, Lyon, Métropole">
+        <div class="champ" id="ex-epci-champ">
+          <label for="ex-epci">Intercommunalité (EPCI)</label>
+          <select id="ex-epci"><option value="">Toutes les intercommunalités</option></select>
+        </div>
+        <div class="champ" id="ex-nom-champ">
+          <label for="ex-nom">Nom contenant</label>
+          <input id="ex-nom" type="search" autocomplete="off" spellcheck="false" placeholder="Ex. : Lyon, Saint">
+        </div>
       </div>
       <label class="case" id="ex-appart-champ"><input type="checkbox" id="ex-appart"> Ajouter les colonnes d'appartenance (région, département, EPCI)</label>
     </fieldset>
-    </div>
-
-    <div class="ex-col">
 
     <fieldset class="carte etape ex-etape3">
       <legend><span class="num-etape" aria-hidden="true">3</span>Indicateurs</legend>
-      <div class="champ">
-        <label for="ex-ind-recherche">Rechercher un indicateur du thème</label>
-        <input id="ex-ind-recherche" type="search" autocomplete="off" spellcheck="false" placeholder="Par exemple : vacants, 2023, prix" aria-describedby="ex-ind-compte">
+      <div class="ind-outils">
+        <div class="champ">
+          <label for="ex-ind-recherche">Rechercher un indicateur du thème</label>
+          <input id="ex-ind-recherche" type="search" autocomplete="off" spellcheck="false" placeholder="Par exemple : vacants, 2023, prix" aria-describedby="ex-ind-compte">
+        </div>
+        <div class="boutons-ligne">
+          <button type="button" class="btn btn-petit" id="ex-ind-tous">Cocher la liste affichée</button>
+          <button type="button" class="btn btn-petit" id="ex-ind-aucun">Tout décocher</button>
+          <button type="button" class="btn btn-petit" id="ex-ind-defaut">Sélection conseillée</button>
+        </div>
       </div>
       <p class="aide" id="ex-ind-compte" aria-live="polite"></p>
-      <div class="boutons-ligne">
-        <button type="button" class="btn btn-petit" id="ex-ind-tous">Cocher la liste affichée</button>
-        <button type="button" class="btn btn-petit" id="ex-ind-aucun">Tout décocher</button>
-        <button type="button" class="btn btn-petit" id="ex-ind-defaut">Sélection conseillée</button>
-      </div>
       <div class="ex-choisis" id="ex-choisis" aria-label="Indicateurs choisis" role="group"></div>
       <ul class="ind-liste" id="ex-ind-liste" aria-label="Indicateurs du thème"></ul>
     </fieldset>
@@ -183,7 +179,6 @@
       <div id="ex-conds" class="conds"></div>
       <button type="button" class="btn btn-petit" id="ex-cond-ajout">Ajouter une condition</button>
     </fieldset>
-    </div>
 
     <div class="ex-lancer">
       <button type="submit" class="btn btn-primaire" id="ex-lancer">Afficher les résultats</button>

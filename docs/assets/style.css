@@ -5,7 +5,8 @@
 
    Règles de mise en page (à respecter pour toute modification) :
    - une seule échelle de tailles de texte (variables --t-*), aucune taille écrite en dur ailleurs ;
-   - deux graisses seulement : 400 (texte) et 700 (titres, libellés, boutons, chiffres clés) ;
+   - graisses : 400 (texte), 700 (titres, libellés, boutons, chiffres clés), 600 pour le seul sous-titre de l'accueil ;
+   - le texte occupe toute la largeur de son bloc (pas de largeur maximale en caractères) et il est justifié à partir de 700 px ;
    - vert réservé au titre de la page et aux chiffres clés ; les titres de section sont en gris, précédés d'un cercle vert ;
    - espacements pris dans l'échelle --e-* ; aucun texte coupé (pas de points de suspension), le texte va à la ligne. */
 
@@ -38,7 +39,7 @@
   --t-2xl: clamp(1.75rem, 1.45rem + 1.1vw, 2.25rem); /* 28 à 36 px : titre de la page */
   /* Chiffres clés */
   --t-chiffre: 1.75rem;
-  --t-chiffre-fort: clamp(2.5rem, 2.1rem + 1.6vw, 3.25rem);
+  --t-chiffre-fort: clamp(2rem, 1.7rem + 1vw, 2.5rem);
 
   /* Échelle des espacements */
   --e-1: 4px; --e-2: 8px; --e-3: 12px; --e-4: 16px; --e-5: 24px; --e-6: 32px; --e-7: 48px;
@@ -80,7 +81,7 @@ h2.puce::before, .puce-texte::before {
 .carte > h3:first-child { margin-top: 0; }
 p { margin: 0 0 var(--e-3); }
 q { quotes: "«\00a0" "\00a0»" "“" "”"; }
-.chapo { font-size: var(--t-l); line-height: 1.55; max-width: 82ch; margin-bottom: var(--e-6); }
+.chapo { font-size: var(--t-l); line-height: 1.55; margin-bottom: var(--e-6); }
 .note { font-size: var(--t-s); color: var(--texte-discret); }
 .aide { font-size: var(--t-s); color: var(--texte-discret); margin: var(--e-1) 0 var(--e-3); }
 .visuellement-cache {
@@ -223,7 +224,7 @@ input::placeholder { color: #8C8F94; }
 @media (max-width: 1000px) { .hero { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 600px) { .hero { padding: var(--e-5) var(--e-4); } }
 .hero h1 { margin-top: var(--e-2); margin-bottom: var(--e-4); }
-.h1-suite { display: block; margin-top: var(--e-2); font-size: var(--t-xl); font-weight: 400; color: var(--gris); letter-spacing: 0; }
+.h1-suite { display: block; margin-top: var(--e-2); font-size: var(--t-l); font-weight: 600; color: var(--gris); letter-spacing: 0; }
 .hero .chapo { max-width: none; margin-bottom: var(--e-4); }
 .surtitre { text-transform: uppercase; letter-spacing: .08em; font-size: var(--t-xs); font-weight: 700; color: var(--texte-discret); margin: 0; }
 .maj { font-size: var(--t-s); color: var(--texte-discret); }
@@ -247,19 +248,22 @@ input::placeholder { color: #8C8F94; }
 .chiffre-valeur { color: var(--vert); font-size: var(--t-chiffre); font-weight: 700; line-height: 1.15; margin: 0 0 var(--e-1); font-variant-numeric: tabular-nums; }
 .chiffre-libelle { margin: 0; font-size: var(--t-s); color: var(--texte-discret); }
 
-.besoin-france { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: var(--e-5) var(--e-6); align-items: start; }
-.besoin-hero { border-right: 1px solid var(--trait); padding-right: var(--e-6); }
-.besoin-hero-libelle { font-weight: 700; font-size: var(--t-s); margin: 0 0 var(--e-2); }
-.besoin-hero-valeur { color: var(--vert); font-size: var(--t-chiffre-fort); font-weight: 700; line-height: 1; margin: 0 0 var(--e-2); font-variant-numeric: tabular-nums; }
-.besoin-hero-unite { margin: 0; font-size: var(--t-s); color: var(--texte-discret); }
-.besoin-details { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--e-5); }
-.besoin-carte .chiffre-valeur { font-size: var(--t-chiffre); }
-.besoin-conclusion, .besoin-france .note { grid-column: 1 / -1; margin: 0; }
+/* Besoin en logement de la France : quatre colonnes égales, même structure (chiffre puis libellé), séparées par un trait. */
+.besoin-france { display: grid; gap: var(--e-5); }
+.besoin-details { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.besoin-carte { padding: 0 var(--e-5); border-left: 1px solid var(--trait); }
+.besoin-carte:first-child { padding-left: 0; border-left: 0; }
+.besoin-carte .chiffre-valeur { font-size: var(--t-chiffre-fort); line-height: 1.1; margin-bottom: var(--e-2); white-space: nowrap; }
+.besoin-carte .chiffre-libelle { font-size: var(--t-s); }
+.besoin-conclusion, .besoin-france .note { margin: 0; }
 @media (max-width: 900px) {
-  .besoin-france { grid-template-columns: 1fr; }
-  .besoin-hero { border-right: 0; border-bottom: 1px solid var(--trait); padding: 0 0 var(--e-5); }
+  .besoin-details { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--e-5); }
+  .besoin-carte:nth-child(odd) { padding-left: 0; border-left: 0; }
 }
-@media (max-width: 600px) { .besoin-details { grid-template-columns: 1fr; gap: var(--e-4); } }
+@media (max-width: 480px) {
+  .besoin-details { grid-template-columns: minmax(0, 1fr); }
+  .besoin-carte { padding: 0; border-left: 0; }
+}
 
 .conclusion { display: flex; gap: var(--e-3); align-items: flex-start; padding: var(--e-3) var(--e-4); border-radius: 10px; font-weight: 700; font-size: var(--t-m); }
 .conclusion::before { content: ""; width: 14px; height: 14px; border-radius: 50%; flex: none; margin-top: .3em; }
@@ -289,11 +293,17 @@ input::placeholder { color: #8C8F94; }
 .rubrique-titre::after { content: " \2192"; color: var(--vert-texte); }
 
 /* ---------- Explorer ---------- */
-/* Deux colonnes lues de haut en bas : étapes 1 et 2 à gauche, étapes 3 et 4 à droite. */
-.ex-grille { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 0 var(--e-4); align-items: start; }
-.ex-col { min-width: 0; }
-.ex-lancer { grid-column: 1 / -1; }
-@media (max-width: 1000px) { .ex-grille { grid-template-columns: minmax(0, 1fr); } }
+/* Les quatre étapes l'une sous l'autre, chacune sur toute la largeur ; dans une étape, les champs sont côte à côte. */
+.ex-grille { display: block; }
+.champs-ligne { display: grid; gap: 0 var(--e-4); align-items: end; }
+.champs-ligne.champs-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* Autant de colonnes égales que de champs affichés (3 ou 4 selon le niveau), qui passent à la ligne sur petit écran. */
+.champs-ligne.champs-4 { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+@media (max-width: 560px) { .champs-ligne.champs-2 { grid-template-columns: minmax(0, 1fr); } }
+.ind-outils { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 var(--e-4); align-items: end; }
+.ind-outils .champ { margin-bottom: 0; }
+.ind-outils .boutons-ligne { margin: 0; }
+@media (max-width: 860px) { .ind-outils { grid-template-columns: minmax(0, 1fr); } .ind-outils .boutons-ligne { margin-top: var(--e-3); } }
 fieldset.etape { margin: 0 0 var(--e-4); min-width: 0; }
 fieldset.etape legend { float: left; width: 100%; padding: 0; margin: 0 0 var(--e-4); font-size: var(--t-l); font-weight: 700; color: var(--gris); display: flex; flex-wrap: wrap; align-items: center; gap: var(--e-1) 10px; }
 fieldset.etape legend + * { clear: both; }
@@ -308,7 +318,7 @@ fieldset.etape legend + * { clear: both; }
 .puce-choisie button { flex: none; border: 0; background: transparent; color: var(--gris); font: inherit; font-weight: 700; width: 26px; height: 26px; border-radius: 50%; cursor: pointer; line-height: 1; }
 .puce-choisie button:hover { background: rgba(81, 84, 89, .12); }
 
-.ind-liste { list-style: none; margin: 0; padding: 0; max-height: 520px; overflow-y: auto; border: 1px solid var(--trait); border-radius: 10px; }
+.ind-liste { list-style: none; margin: 0; padding: 0; max-height: 440px; overflow-y: auto; border: 1px solid var(--trait); border-radius: 10px; }
 .ind-liste li { border-bottom: 1px solid var(--trait-leger); padding: 10px var(--e-3); }
 .ind-liste li:last-child { border-bottom: 0; }
 .ind-liste li.choisi { background: #F7FBF0; }
