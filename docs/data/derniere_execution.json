@@ -1,0 +1,220 @@
+{
+ "date": "2026-11-02T16:03:23+00:00",
+ "publiable": true,
+ "modules": [
+  {
+   "module": "aav",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 8
+  },
+  {
+   "module": "accueil_enfant",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 0
+  },
+  {
+   "module": "apl",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 2
+  },
+  {
+   "module": "besoins_sdes",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 6
+  },
+  {
+   "module": "caf",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 1
+  },
+  {
+   "module": "catnat",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 3
+  },
+  {
+   "module": "copro",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 1
+  },
+  {
+   "module": "densite",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 1
+  },
+  {
+   "module": "dispositifs_anct",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 1
+  },
+  {
+   "module": "dpe",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 0
+  },
+  {
+   "module": "dvf_stats",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 20
+  },
+  {
+   "module": "economie_insee",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 107
+  },
+  {
+   "module": "energie_conso",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 0
+  },
+  {
+   "module": "equipements_insee",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 10
+  },
+  {
+   "module": "filosofi",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 12
+  },
+  {
+   "module": "france_travail",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 2
+  },
+  {
+   "module": "gares",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 1
+  },
+  {
+   "module": "ircom",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 3
+  },
+  {
+   "module": "lovac",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 1
+  },
+  {
+   "module": "loyers",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 2
+  },
+  {
+   "module": "ptz",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 14
+  },
+  {
+   "module": "qpv",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 0
+  },
+  {
+   "module": "rp_emploi",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 130
+  },
+  {
+   "module": "rp_logement",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 77
+  },
+  {
+   "module": "rp_menages",
+   "etat": "ok",
+   "blocs": 2,
+   "secondes": 120
+  },
+  {
+   "module": "rp_population",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 34
+  },
+  {
+   "module": "rpls",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 15
+  },
+  {
+   "module": "sitadel",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 5
+  },
+  {
+   "module": "sru",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 0
+  },
+  {
+   "module": "thrs",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 0
+  },
+  {
+   "module": "trait_de_cote",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 0
+  },
+  {
+   "module": "urssaf",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 1
+  },
+  {
+   "module": "zonage_abc",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 0
+  },
+  {
+   "module": "zone_climatique",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 0
+  },
+  {
+   "module": "zones_tendues",
+   "etat": "ok",
+   "blocs": 1,
+   "secondes": 0
+  }
+ ],
+ "echecs": [],
+ "indicateurs": 2453,
+ "indicateurs_ajoutes": [],
+ "indicateurs_supprimes": []
+}

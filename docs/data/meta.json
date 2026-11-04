@@ -1,0 +1,82 @@
+{
+ "mise_a_jour": "2026-11-02",
+ "geographie": "COG 2026 (34 875 communes)",
+ "themes": {
+  "territoire": {
+   "libelle": "Territoire et zonages",
+   "fichier": "territoire.parquet",
+   "indicateurs": 82
+  },
+  "population": {
+   "libelle": "Population",
+   "fichier": "population.parquet",
+   "indicateurs": 176
+  },
+  "menages": {
+   "libelle": "Ménages et familles",
+   "fichier": "menages.parquet",
+   "indicateurs": 406
+  },
+  "profils": {
+   "libelle": "Profils de ménages",
+   "fichier": "profils.parquet",
+   "indicateurs": 12
+  },
+  "logement": {
+   "libelle": "Logement (parc existant)",
+   "fichier": "logement.parquet",
+   "indicateurs": 304
+  },
+  "construction": {
+   "libelle": "Construction neuve",
+   "fichier": "construction.parquet",
+   "indicateurs": 60
+  },
+  "besoins": {
+   "libelle": "Besoins en logement",
+   "fichier": "besoins.parquet",
+   "indicateurs": 31
+  },
+  "marche": {
+   "libelle": "Marché et prix",
+   "fichier": "marche.parquet",
+   "indicateurs": 59
+  },
+  "revenus": {
+   "libelle": "Revenus et aides",
+   "fichier": "revenus.parquet",
+   "indicateurs": 95
+  },
+  "emploi": {
+   "libelle": "Emploi et activité",
+   "fichier": "emploi.parquet",
+   "indicateurs": 363
+  },
+  "economie": {
+   "libelle": "Entreprises et salaires",
+   "fichier": "economie.parquet",
+   "indicateurs": 487
+  },
+  "equipements": {
+   "libelle": "Équipements et services",
+   "fichier": "equipements.parquet",
+   "indicateurs": 342
+  },
+  "risques_energie": {
+   "libelle": "Risques, climat et énergie",
+   "fichier": "risques_energie.parquet",
+   "indicateurs": 36
+  }
+ },
+ "niveaux": [
+  "France",
+  "Région",
+  "Département",
+  "Zone d'emploi",
+  "EPCI",
+  "Territoire d'industrie",
+  "Commune"
+ ],
+ "indicateurs": 2453,
+ "territoires": 36738
+}

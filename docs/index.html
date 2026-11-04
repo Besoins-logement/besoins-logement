@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Besoins en logement - base de données</title>
+<meta name="description" content="Base de données publique sur les besoins en logement en France : plus de 2 400 indicateurs de la France à la commune, à consulter, filtrer et télécharger en Excel ou CSV.">
+<meta name="theme-color" content="#97C33D">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='14' cy='17' r='12' fill='%2397C33D'/%3E%3Ccircle cx='23' cy='10' r='7' fill='%2361D2D1' fill-opacity='.85'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="assets/style.css">
+<script type="module" src="assets/js/app.js"></script>
+</head>
+<body>
+<a class="lien-evitement" href="#contenu">Aller au contenu</a>
+
+<header class="entete">
+  <div class="conteneur entete-ligne">
+    <a class="marque" href="#accueil">
+      <span class="marque-cercles" aria-hidden="true"><span></span><span></span></span>
+      <span class="marque-texte"><span class="marque-titre">Besoins en logement</span> <span class="marque-sous-titre">- base de données</span></span>
+    </a>
+    <button type="button" class="menu-bouton" id="menu-bouton" aria-expanded="false" aria-controls="menu">Menu</button>
+  </div>
+  <nav class="menu conteneur" id="menu" aria-label="Menu principal">
+    <ul>
+      <li><a href="#accueil" data-route="accueil">Accueil</a></li>
+      <li><a href="#explorer" data-route="explorer">Explorer la base</a></li>
+      <li><a href="#territoire" data-route="territoire">Fiche territoire</a></li>
+      <li><a href="#dictionnaire" data-route="dictionnaire">Dictionnaire</a></li>
+      <li><a href="#sources" data-route="sources">Sources</a></li>
+      <li><a href="#telechargements" data-route="telechargements">Téléchargements</a></li>
+      <li><a href="#methode" data-route="methode">Méthode</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="contenu" class="conteneur" tabindex="-1">
+<noscript><p class="alerte">Ce site a besoin de JavaScript pour lire les données. Les fichiers restent téléchargeables directement, par exemple <a href="data/csv/besoins.csv.gz">data/csv/besoins.csv.gz</a> ou <a href="data/dictionnaire.csv">data/dictionnaire.csv</a>.</p></noscript>
+
+<!-- ============================ ACCUEIL ============================ -->
+<section class="page" id="page-accueil" data-page="accueil" aria-labelledby="titre-accueil">
+  <div class="hero carte">
+    <p class="surtitre">Base de données publique</p>
+    <h1 id="titre-accueil" tabindex="-1">Les besoins en logement, de la France entière à la commune</h1>
+    <p class="chapo">Cette base réunit les données publiques utiles pour comprendre les besoins en logement : population, ménages, parc de logements, construction neuve, prix, revenus, emploi, équipements et risques. Toutes les données sont ramenées à la même géographie, les communes au 1er janvier 2026, puis calculées à sept niveaux : France, régions, départements, zones d'emploi, intercommunalités (EPCI), territoires d'industrie et communes.</p>
+    <p class="maj">Mise à jour : <strong data-meta="date">chargement...</strong> <span class="sep" aria-hidden="true">·</span> mise à jour automatique chaque mois</p>
+    <p class="actions-hero">
+      <a class="btn btn-primaire" href="#explorer">Explorer la base</a>
+      <a class="btn" href="#territoire">Voir la fiche d'un territoire</a>
+      <a class="btn" href="#telechargements">Télécharger les fichiers</a>
+    </p>
+  </div>
+
+  <h2 class="puce">La base en chiffres</h2>
+  <div class="chiffres" id="acc-chiffres">
+    <div class="chiffre carte accent-vert"><p class="chiffre-valeur" data-meta="indicateurs">...</p><p class="chiffre-libelle">indicateurs, chacun défini dans le dictionnaire</p></div>
+    <div class="chiffre carte accent-bleu"><p class="chiffre-valeur" data-meta="themes">...</p><p class="chiffre-libelle">thèmes, de la démographie aux risques</p></div>
+    <div class="chiffre carte accent-turquoise"><p class="chiffre-valeur" data-meta="territoires">...</p><p class="chiffre-libelle">territoires sur 7 niveaux, dont <span data-meta="communes">34 875</span> communes</p></div>
+    <div class="chiffre carte accent-jaune"><p class="chiffre-valeur" id="acc-sources">...</p><p class="chiffre-libelle" id="acc-sources-libelle">sources intégrées</p></div>
+  </div>
+
+  <h2 class="puce">Le besoin en logement en France</h2>
+  <div class="besoin-france carte" id="acc-besoin" aria-busy="true">
+    <div class="besoin-hero">
+      <p class="besoin-hero-libelle">Besoin en construction par an, de 2030 à 2040</p>
+      <p class="besoin-hero-valeur"><span id="acc-besoin-valeur" class="chargement">Chargement des données...</span></p>
+      <p class="besoin-hero-unite">logements à construire chaque année en France</p>
+    </div>
+    <div class="besoin-details">
+      <div class="besoin-carte"><p class="chiffre-valeur" id="acc-construction">...</p><p class="chiffre-libelle">logements mis en chantier par an aujourd'hui (moyenne 2023 à 2025, hors Mayotte)</p></div>
+      <div class="besoin-carte"><p class="chiffre-valeur" id="acc-couverture">...</p><p class="chiffre-libelle">du besoin couvert par la construction actuelle</p></div>
+      <div class="besoin-carte"><p class="chiffre-valeur" id="acc-departements">...</p><p class="chiffre-libelle">départements où la construction actuelle ne couvre pas le besoin</p></div>
+    </div>
+    <p class="besoin-conclusion" id="acc-conclusion" hidden></p>
+    <p class="note">Calcul de la base : méthode du SDES, hypothèses de la CERC Auvergne-Rhône-Alpes, construction d'après Sitadel. <a href="#methode">Voir la méthode</a> ou <a href="#territoire?niveau=france&amp;code=FR">la fiche France</a>.</p>
+  </div>
+
+  <h2 class="puce">Mode d'emploi en 3 étapes</h2>
+  <ol class="etapes">
+    <li class="carte"><span class="etape-num" aria-hidden="true">1</span><h3>Choisir un thème et un niveau</h3><p>Par exemple les besoins en logement au niveau des départements, ou les prix pour toutes les communes d'une région.</p></li>
+    <li class="carte"><span class="etape-num" aria-hidden="true">2</span><h3>Filtrer et choisir les indicateurs</h3><p>Une région, un département, un nom, des conditions sur les valeurs ; les indicateurs se choisissent dans le dictionnaire, avec leur définition.</p></li>
+    <li class="carte"><span class="etape-num" aria-hidden="true">3</span><h3>Afficher puis exporter</h3><p>Le tableau se trie et se feuillette. L'export Excel ou CSV contient exactement votre sélection, avec une feuille qui décrit chaque colonne.</p></li>
+  </ol>
+  <p><a class="btn btn-primaire" href="#explorer">Commencer</a></p>
+
+  <h2 class="puce">Les rubriques du site</h2>
+  <div class="rubriques">
+    <a class="rubrique carte" href="#explorer"><span class="rubrique-titre">Explorer la base</span><span>Choisir un thème, des territoires et des indicateurs, puis exporter la sélection en Excel ou en CSV.</span></a>
+    <a class="rubrique carte" href="#territoire"><span class="rubrique-titre">Fiche territoire</span><span>Les chiffres clés d'un territoire comparés à la France, avec trois graphiques.</span></a>
+    <a class="rubrique carte" href="#dictionnaire"><span class="rubrique-titre">Dictionnaire</span><span>Tous les indicateurs : définition, unité, année, règle de calcul et source.</span></a>
+    <a class="rubrique carte" href="#sources"><span class="rubrique-titre">Sources</span><span>Le catalogue des sources repérées par le projet, intégrées ou non, avec leurs adresses.</span></a>
+    <a class="rubrique carte" href="#telechargements"><span class="rubrique-titre">Téléchargements</span><span>Chaque thème complet en Parquet et en CSV, pour Excel, Power BI, Python ou R.</span></a>
+    <a class="rubrique carte" href="#methode"><span class="rubrique-titre">Méthode</span><span>Géographie, règles de calcul, mise à jour et limites des données.</span></a>
+  </div>
+
+  <h2 class="puce">Licence et citation</h2>
+  <div class="carte texte">
+    <p>Données publiques, Licence ouverte 2.0 (Etalab) ou licence équivalente indiquée pour chaque indicateur. Elles sont réutilisables en citant la source. Sources : Insee, SDES (ministère chargé du logement), DGFiP, DGALN, Cerema, ANCT, ANIL, Urssaf, Cnaf, DARES, DREES, SNCF, Agence ORE, ADEME, Géorisques.</p>
+    <p>Mention proposée : <q>Source : base Besoins en logement (Procivis), d'après Insee, SDES, DGFiP et les autres producteurs cités dans le dictionnaire, mise à jour du <span data-meta="date">...</span>.</q></p>
+  </div>
+</section>
+
+<!-- ============================ EXPLORER ============================ -->
+<section class="page" id="page-explorer" data-page="explorer" aria-labelledby="titre-explorer" hidden>
+  <h1 id="titre-explorer" tabindex="-1">Explorer la base</h1>
+  <p class="chapo">Choisissez un thème, un niveau, des territoires et des indicateurs. Le tableau affiche exactement votre sélection, que vous pouvez exporter en Excel ou en CSV.</p>
+  <div class="alerte" id="ex-alerte" role="alert" hidden></div>
+
+  <form id="ex-form" class="ex-grille" novalidate>
+    <fieldset class="carte etape ex-etape1">
+      <legend><span class="num-etape" aria-hidden="true">1</span>Thème et niveau</legend>
+      <div class="champ">
+        <label for="ex-theme">Thème</label>
+        <select id="ex-theme"><option value="">Chargement...</option></select>
+      </div>
+      <div class="champ">
+        <label for="ex-niveau">Niveau géographique</label>
+        <select id="ex-niveau"></select>
+      </div>
+    </fieldset>
+
+    <fieldset class="carte etape ex-etape2">
+      <legend><span class="num-etape" aria-hidden="true">2</span>Territoires</legend>
+      <p class="aide" id="ex-geo-aide"></p>
+      <div class="champs-2">
+        <div class="champ" id="ex-reg-champ">
+          <label for="ex-reg">Région</label>
+          <select id="ex-reg"><option value="">Toutes les régions</option></select>
+        </div>
+        <div class="champ" id="ex-dep-champ">
+          <label for="ex-dep">Département</label>
+          <select id="ex-dep"><option value="">Tous les départements</option></select>
+        </div>
+      </div>
+      <div class="champ" id="ex-epci-champ">
+        <label for="ex-epci">Intercommunalité (EPCI)</label>
+        <select id="ex-epci"><option value="">Toutes les intercommunalités</option></select>
+      </div>
+      <div class="champ" id="ex-nom-champ">
+        <label for="ex-nom">Nom contenant</label>
+        <input id="ex-nom" type="search" autocomplete="off" spellcheck="false" placeholder="Par exemple : Saint, Lyon, Métropole">
+      </div>
+      <label class="case" id="ex-appart-champ"><input type="checkbox" id="ex-appart"> Ajouter les colonnes d'appartenance (région, département, EPCI)</label>
+    </fieldset>
+
+    <fieldset class="carte etape ex-etape3">
+      <legend><span class="num-etape" aria-hidden="true">3</span>Indicateurs</legend>
+      <div class="champ">
+        <label for="ex-ind-recherche">Rechercher un indicateur du thème</label>
+        <input id="ex-ind-recherche" type="search" autocomplete="off" spellcheck="false" placeholder="Par exemple : vacants, 2023, prix" aria-describedby="ex-ind-compte">
+      </div>
+      <p class="aide" id="ex-ind-compte" aria-live="polite"></p>
+      <div class="boutons-ligne">
+        <button type="button" class="btn btn-petit" id="ex-ind-tous">Cocher la liste affichée</button>
+        <button type="button" class="btn btn-petit" id="ex-ind-aucun">Tout décocher</button>
+        <button type="button" class="btn btn-petit" id="ex-ind-defaut">Sélection conseillée</button>
+      </div>
+      <div class="ex-choisis" id="ex-choisis" aria-label="Indicateurs choisis" role="group"></div>
+      <ul class="ind-liste" id="ex-ind-liste" aria-label="Indicateurs du thème"></ul>
+    </fieldset>
+
+    <fieldset class="carte etape ex-etape4">
+      <legend><span class="num-etape" aria-hidden="true">4</span>Conditions sur les valeurs <span class="facultatif">(facultatif)</span></legend>
+      <p class="aide">Gardez seulement les territoires qui respectent toutes les conditions. Un territoire sans valeur pour l'indicateur est écarté.</p>
+      <div id="ex-conds" class="conds"></div>
+      <button type="button" class="btn btn-petit" id="ex-cond-ajout">Ajouter une condition</button>
+    </fieldset>
+
+    <div class="ex-lancer">
+      <button type="submit" class="btn btn-primaire" id="ex-lancer">Afficher les résultats</button>
+      <button type="button" class="btn" id="ex-reinit">Réinitialiser</button>
+      <span class="statut" id="ex-statut" role="status" aria-live="polite"></span>
+    </div>
+  </form>
+
+  <section class="resultats" aria-labelledby="titre-resultats">
+    <div class="res-tete">
+      <div>
+        <h2 id="titre-resultats" class="puce" tabindex="-1">Résultats</h2>
+        <p class="res-resume" id="ex-resume">Aucune requête lancée pour l'instant.</p>
+      </div>
+      <div class="res-actions">
+        <button type="button" class="btn" id="ex-export-xlsx" disabled>Exporter en Excel (.xlsx)</button>
+        <button type="button" class="btn" id="ex-export-csv" disabled>Exporter en CSV</button>
+        <button type="button" class="btn btn-discret" id="ex-lien" disabled>Copier le lien de cette sélection</button>
+      </div>
+    </div>
+    <p class="aide" id="ex-export-statut" role="status" aria-live="polite"></p>
+    <div id="ex-tableau"></div>
+    <p class="note">Excel : une feuille « Données » avec les libellés en en-tête et une feuille « Lisez-moi » qui décrit chaque colonne. CSV : séparateur point-virgule, virgule décimale, encodage UTF-8. Une case vide signale une valeur absente ou couverte par le secret statistique, jamais un zéro.</p>
+  </section>
+</section>
+
+<!-- ============================ FICHE TERRITOIRE ============================ -->
+<section class="page" id="page-territoire" data-page="territoire" aria-labelledby="titre-territoire" hidden>
+  <h1 id="titre-territoire" tabindex="-1">Fiche territoire</h1>
+  <p class="chapo">Cherchez une commune, une intercommunalité, un département, une région, une zone d'emploi ou un territoire d'industrie pour voir ses chiffres clés comparés à la France.</p>
+  <div class="carte ft-recherche">
+    <label for="ft-recherche">Territoire (nom ou code)</label>
+    <div class="combo">
+      <input id="ft-recherche" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="ft-suggestions" aria-describedby="ft-aide" autocomplete="off" spellcheck="false" placeholder="Par exemple : Lyon, 69123, Gironde, Bretagne">
+      <ul id="ft-suggestions" class="suggestions" role="listbox" aria-label="Territoires trouvés" hidden></ul>
+    </div>
+    <p class="aide" id="ft-aide">Tapez au moins deux lettres, puis choisissez avec les flèches et la touche Entrée, ou cliquez sur un nom.</p>
+    <p class="exemples">Exemples : <a href="#territoire?niveau=france&amp;code=FR">France</a>, <a href="#territoire?niveau=region&amp;code=84">Auvergne-Rhône-Alpes</a>, <a href="#territoire?niveau=departement&amp;code=33">Gironde</a>, <a href="#territoire?niveau=commune&amp;code=69123">Lyon</a>, <a href="#territoire?niveau=epci&amp;code=243500139">Rennes Métropole</a></p>
+  </div>
+  <div id="ft-statut" class="statut-bloc" role="status" aria-live="polite"></div>
+  <div id="ft-fiche" hidden></div>
+</section>
+
+<!-- ============================ DICTIONNAIRE ============================ -->
+<section class="page" id="page-dictionnaire" data-page="dictionnaire" aria-labelledby="titre-dictionnaire" hidden>
+  <h1 id="titre-dictionnaire" tabindex="-1">Dictionnaire des indicateurs</h1>
+  <p class="chapo">Chaque indicateur de la base avec sa définition, son unité, son année, sa règle de calcul aux niveaux supérieurs et sa source. Le nom technique est celui de la colonne dans les fichiers.</p>
+  <div class="carte filtres">
+    <div class="champ champ-large">
+      <label for="dic-recherche">Rechercher</label>
+      <input id="dic-recherche" type="search" autocomplete="off" spellcheck="false" placeholder="Mot du libellé, nom technique ou source : vacants, filo_, Sitadel">
+    </div>
+    <div class="champ">
+      <label for="dic-theme">Thème</label>
+      <select id="dic-theme"><option value="">Tous les thèmes</option></select>
+    </div>
+    <div class="champ">
+      <label for="dic-agregation">Règle de calcul</label>
+      <select id="dic-agregation">
+        <option value="">Toutes les règles</option>
+        <option value="somme">Somme</option>
+        <option value="ratio">Ratio recalculé</option>
+        <option value="non_additif">Non additif</option>
+        <option value="texte">Texte (commune)</option>
+        <option value="calcul">Calcul de la base</option>
+      </select>
+    </div>
+    <p class="filtres-pied"><span id="dic-compte" role="status" aria-live="polite"></span> <a class="btn btn-petit" href="data/dictionnaire.csv" download>Télécharger le dictionnaire (CSV)</a></p>
+  </div>
+  <div id="dic-tableau"></div>
+</section>
+
+<!-- ============================ SOURCES ============================ -->
+<section class="page" id="page-sources" data-page="sources" aria-labelledby="titre-sources" hidden>
+  <h1 id="titre-sources" tabindex="-1">Sources</h1>
+  <p class="chapo">Le catalogue des sources repérées par le projet : celles déjà intégrées à la base, celles à intégrer et celles qui servent de référence (études, outils, règles). Les adresses mènent aux sites des producteurs.</p>
+  <div class="carte filtres">
+    <div class="champ champ-large">
+      <label for="src-recherche">Rechercher</label>
+      <input id="src-recherche" type="search" autocomplete="off" spellcheck="false" placeholder="Nom, producteur ou référence : LOVAC, Insee, P2-020">
+    </div>
+    <div class="champ">
+      <label for="src-integration">État</label>
+      <select id="src-integration"><option value="">Tous les états</option></select>
+    </div>
+    <div class="champ">
+      <label for="src-theme">Thème</label>
+      <select id="src-theme"><option value="">Tous les thèmes</option></select>
+    </div>
+    <p class="filtres-pied"><span id="src-compte" role="status" aria-live="polite"></span> <a class="btn btn-petit" href="data/sources.csv" download>Télécharger le catalogue (CSV)</a></p>
+  </div>
+  <div id="src-tableau"></div>
+</section>
+
+<!-- ============================ TELECHARGEMENTS ============================ -->
+<section class="page" id="page-telechargements" data-page="telechargements" aria-labelledby="titre-telechargements" hidden>
+  <h1 id="titre-telechargements" tabindex="-1">Téléchargements</h1>
+  <p class="chapo">Chaque thème complet, pour les sept niveaux géographiques, en deux formats : Parquet (compact, pour Python, R, DuckDB) et CSV compressé (pour Excel et Power BI). Les colonnes sont <code>niveau</code>, <code>code</code>, <code>nom</code>, puis les indicateurs sous leur nom technique, décrit dans le dictionnaire.</p>
+  <div class="carte">
+    <h2 class="puce">Les thèmes</h2>
+    <div class="table-defile">
+      <table class="donnees tableau-fichiers" id="tel-themes">
+        <caption class="visuellement-cache">Fichiers à télécharger par thème</caption>
+        <thead><tr><th scope="col">Thème</th><th scope="col" class="num">Indicateurs</th><th scope="col">Parquet</th><th scope="col">CSV compressé (gzip)</th></tr></thead>
+        <tbody><tr><td colspan="4"><span class="chargement">Chargement de la liste...</span></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="carte">
+    <h2 class="puce">Fichiers complémentaires</h2>
+    <div class="table-defile">
+      <table class="donnees tableau-fichiers" id="tel-autres">
+        <caption class="visuellement-cache">Fichiers complémentaires</caption>
+        <thead><tr><th scope="col">Fichier</th><th scope="col">Contenu</th><th scope="col">Téléchargement</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="carte texte">
+    <h2 class="puce">Formats</h2>
+    <ul>
+      <li><strong>CSV des thèmes et des territoires</strong> (<code>.csv.gz</code>) : séparateur point-virgule, point décimal, encodage UTF-8 avec BOM, compression gzip. Décompressez le fichier avec 7-Zip (Windows) ou d'un double clic (Mac), puis ouvrez-le dans Excel par Données, À partir d'un fichier texte/CSV, en choisissant le point-virgule et le point décimal.</li>
+      <li><strong>Dictionnaire et catalogue des sources</strong> (<code>.csv</code>) : séparateur virgule, encodage UTF-8 avec BOM, non compressés.</li>
+      <li><strong>Parquet</strong> : format compact qui garde les types de colonnes. Il se lit avec Python (pandas, pyarrow), R (arrow), DuckDB ou Power BI Desktop pour un fichier enregistré sur votre poste.</li>
+      <li>Une case vide signale une valeur absente ou couverte par le secret statistique, jamais un zéro.</li>
+    </ul>
+    <h3>Dans Power BI ou Excel (Power Query), sans téléchargement manuel</h3>
+    <p>Les adresses des fichiers sont stables et se mettent à jour chaque mois. Dans une requête vide, collez par exemple :</p>
+    <pre class="code" id="tel-powerquery"><code>chargement...</code></pre>
+    <h3>Citer la base</h3>
+    <p>Données publiques, Licence ouverte 2.0 (Etalab) ou licence équivalente indiquée pour chaque indicateur ; sources : Insee, SDES, DGFiP, DGALN, Cerema, ANCT, ANIL, Urssaf, Cnaf, DARES, DREES, SNCF, Agence ORE, ADEME, Géorisques. Mention proposée : <q>Source : base Besoins en logement (Procivis), d'après Insee, SDES, DGFiP et les autres producteurs cités dans le dictionnaire, mise à jour du <span data-meta="date">...</span>.</q></p>
+  </div>
+</section>
+
+<!-- ============================ METHODE ============================ -->
+<section class="page" id="page-methode" data-page="methode" aria-labelledby="titre-methode" hidden>
+  <h1 id="titre-methode" tabindex="-1">Méthode</h1>
+  <p class="chapo">Comment la base est construite : une seule géographie, des règles de calcul explicites pour chaque indicateur, une mise à jour automatique chaque mois, et des limites à garder en tête.</p>
+
+  <div class="carte texte">
+    <h2 class="puce">Une seule géographie : les communes de 2026</h2>
+    <p>Toutes les données sont ramenées aux communes du Code officiel géographique (COG) au 1er janvier 2026, soit 34 875 communes. Les données publiées sur une géographie plus ancienne sont converties pour tenir compte des fusions et des scissions de communes. Pour Paris, Lyon et Marseille, la ville entière est retenue, sans les arrondissements, pour ne rien compter deux fois.</p>
+    <p>Les valeurs sont ensuite calculées à sept niveaux, dans le même fichier :</p>
+    <ul class="liste-niveaux">
+      <li><strong>France</strong> (code FR) ;</li>
+      <li><strong>régions</strong> (18) et <strong>départements</strong> (101) ;</li>
+      <li><strong>zones d'emploi</strong> (zonage 2020, 306 zones) ;</li>
+      <li><strong>intercommunalités</strong> (EPCI au 1er janvier 2026, 1 254) ;</li>
+      <li><strong>territoires d'industrie</strong> (programme 2023-2027, 183) ;</li>
+      <li><strong>communes</strong> (34 875).</li>
+    </ul>
+    <p>Pour les zones d'emploi, les intercommunalités et les territoires d'industrie, la région et le département indiqués sont ceux qui regroupent le plus de communes du territoire.</p>
+  </div>
+
+  <div class="carte texte">
+    <h2 class="puce">Les règles de calcul</h2>
+    <p>Chaque indicateur a une règle, indiquée dans le <a href="#dictionnaire">dictionnaire</a> (colonne « agrégation ») :</p>
+    <dl class="regles">
+      <dt>Somme</dt><dd>Les effectifs (habitants, ménages, logements, établissements...) sont additionnés commune par commune.</dd>
+      <dt>Ratio</dt><dd>Les taux et les parts sont recalculés à chaque niveau à partir de leur numérateur et de leur dénominateur : somme des numérateurs divisée par somme des dénominateurs, jamais une moyenne de taux.</dd>
+      <dt>Non additif</dt><dd>Pour les médianes, les prix et les indices : la valeur publiée par la source à ce niveau quand elle existe ; sinon la moyenne des communes pondérée (par la population, les logements, les ventes...) ; sinon la case reste vide.</dd>
+      <dt>Texte</dt><dd>Les libellés (zone ABC, catégorie d'aire d'attraction, zone climatique...) ne sont donnés qu'à la commune.</dd>
+      <dt>Calcul</dt><dd>Les chiffres de synthèse du besoin en logement sont recalculés à chaque niveau.</dd>
+    </dl>
+    <p>Une valeur couverte par le secret statistique ou absente reste vide, jamais 0.</p>
+  </div>
+
+  <div class="carte texte">
+    <h2 class="puce">Le besoin en logement</h2>
+    <p>Le besoin en construction reprend la méthode du SDES (besoins en logements à l'horizon 2030, 2040 et 2050) avec les hypothèses de la CERC Auvergne-Rhône-Alpes (outil TrajectoireLogements2050). Pour chaque décennie :</p>
+    <ul>
+      <li><strong>besoin avant vacants</strong> = croissance des ménages + fluidité du parc + résidences secondaires nouvelles + renouvellement du parc + résorption du mal-logement ;</li>
+      <li><strong>besoin en construction</strong> = besoin avant vacants - logements vacants remis sur le marché.</li>
+    </ul>
+    <p>Il est comparé à la <strong>construction actuelle</strong> : logements mis en chantier par an, en moyenne de 2023 à 2025 (Sitadel). La conclusion pour 2030-2040 suit la règle de la CERC :</p>
+    <ol>
+      <li>couvert si la construction se maintient (sans compter les logements vacants) ;</li>
+      <li>couvert avec la remise sur le marché des logements vacants ;</li>
+      <li>non couvert, même avec les logements vacants remis sur le marché.</li>
+    </ol>
+    <p>Mayotte est hors champ. Les écarts avec l'outil de la CERC sont expliqués dans les définitions du thème « Besoins en logement » du dictionnaire.</p>
+  </div>
+
+  <div class="carte texte">
+    <h2 class="puce">Une mise à jour chaque mois</h2>
+    <p>Un robot (GitHub Actions) recalcule la base le 3 de chaque mois à partir des sources officielles, puis publie les nouveaux fichiers sur ce site. Une source qui ne répond pas garde sa dernière version valide. La date de mise à jour figure en haut de la page d'accueil et dans chaque export.</p>
+    <p id="met-robot" class="note">Chargement du compte rendu de la dernière exécution...</p>
+  </div>
+
+  <div class="carte texte">
+    <h2 class="puce">Les limites à connaître</h2>
+    <ul class="limites">
+      <li>Pour les petites communes, les valeurs sont des ordres de grandeur : secret statistique, estimations du recensement, valeurs réparties à partir de la zone d'emploi.</li>
+      <li><strong>Recensement</strong> : aucune donnée pour Mayotte (17 communes vides).</li>
+      <li><strong>Revenus (Filosofi)</strong> : à la commune, seulement le niveau de vie médian et le taux de pauvreté ; les déciles sont donnés pour les départements, les régions et la France. La valeur « France » de Filosofi est celle de la France métropolitaine.</li>
+      <li><strong>Prix (DVF)</strong> : aucune médiane annuelle n'est publiée ; le prix d'une année est la moyenne des médianes mensuelles, pondérée par le nombre de ventes. La médiane sur cinq ans est exacte. L'Alsace-Moselle et Mayotte sont absentes.</li>
+      <li><strong>Logements vacants du parc privé (LOVAC)</strong> : effectifs masqués dans beaucoup de petites communes, les sommes sont donc des minimums ; la méthode a changé en 2026.</li>
+      <li><strong>Prêts à taux zéro</strong> : le dernier fichier ouvert couvre les prêts de 2017 à 2021, et la commune n'est publiée que par groupes d'au moins 11 prêts : les sommes sont très sous-estimées.</li>
+      <li><strong>Logements sociaux (SRU)</strong> : seul le taux publié est disponible, il ne peut pas être recalculé.</li>
+      <li><strong>CAF</strong> : effectifs arrondis à 5. <strong>France Travail</strong> : catégories A, B et C seulement, au 4e trimestre. <strong>Accueil du jeune enfant</strong> : communes de plus de 10 000 habitants. <strong>Diagnostics de performance énergétique</strong> : un nombre de diagnostics, pas de logements.</li>
+      <li>Certaines valeurs publiées aux niveaux supérieurs (EPCI notamment) sont en géographie 2025 : pour les codes disparus en 2026, la base retient la moyenne pondérée des communes.</li>
+    </ul>
+    <p>Les limites propres à chaque indicateur sont écrites dans sa définition, dans le <a href="#dictionnaire">dictionnaire</a>.</p>
+  </div>
+</section>
+</main>
+
+<footer class="pied">
+  <div class="conteneur">
+    <p><strong>Besoins en logement - base de données.</strong> Projet « Besoins en logement » de Procivis, mise à jour du <span data-meta="date">...</span>.</p>
+    <p>Données publiques, Licence ouverte ; sources : Insee, SDES, DGFiP, DGALN, Cerema, ANCT, ANIL, Urssaf, Cnaf, DARES, DREES, SNCF, Agence ORE, ADEME, Géorisques. Le détail par indicateur est dans le <a href="#dictionnaire">dictionnaire</a>.</p>
+    <p id="pied-depot" hidden></p>
+  </div>
+</footer>
+</body>
+</html>
