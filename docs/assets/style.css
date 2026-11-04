@@ -102,16 +102,21 @@ q { quotes: "«\00a0" "\00a0»" "“" "”"; }
 /* ---------- En-tête ---------- */
 .entete { background: var(--blanc); position: relative; overflow: hidden; border-bottom: 1px solid var(--trait); }
 .entete::before { content: ""; position: absolute; border-radius: 50%; pointer-events: none; width: 220px; height: 220px; right: -80px; top: -150px; background: rgba(151, 195, 61, .14); }
-.entete-ligne { display: flex; align-items: center; justify-content: space-between; gap: var(--e-3); padding-top: var(--e-4); padding-bottom: var(--e-2); position: relative; z-index: 1; }
+.entete-ligne { display: flex; align-items: center; justify-content: space-between; gap: var(--e-3); padding-top: var(--e-5); padding-bottom: var(--e-5); position: relative; z-index: 1; }
 .marque { display: inline-flex; align-items: center; gap: var(--e-3); text-decoration: none; color: var(--gris); min-width: 0; }
 /* Logo : une maison dont l'intérieur est un petit graphique en barres (le logement mesuré par les données),
    dans un cercle vert, avec un cercle turquoise en écho au motif de la charte. */
 .marque-logo { width: 44px; height: 44px; flex: none; display: block; }
-.marque-texte { display: flex; flex-direction: column; line-height: 1.25; }
-.marque-titre { font-weight: 700; font-size: var(--t-l); }
-.marque-sous-titre { color: var(--texte-discret); font-size: var(--t-s); }
+/* Nom du site sur une seule ligne, en capitales espacées : « BASE DE DONNÉES PUBLIQUE » en gras, la suite en gris. */
+.marque-texte {
+  display: flex; flex-wrap: wrap; align-items: baseline; column-gap: .4em;
+  font-size: var(--t-m); line-height: 1.35; text-transform: uppercase; letter-spacing: .07em;
+}
+.marque-titre { font-weight: 700; color: var(--gris); }
+.marque-sous-titre { font-weight: 400; color: var(--texte-discret); }
 .menu { position: relative; z-index: 1; }
-.menu ul { list-style: none; margin: 0; padding: 0 0 var(--e-3); display: flex; flex-wrap: wrap; gap: var(--e-1); }
+/* Le menu est séparé du nom du site par un filet fin et un espace. */
+.menu ul { list-style: none; margin: 0; padding: var(--e-3) 0; border-top: 1px solid var(--trait-leger); display: flex; flex-wrap: wrap; gap: var(--e-1) var(--e-2); }
 .menu a {
   display: block; padding: var(--e-2) 14px; border-radius: 999px; text-decoration: none; color: var(--gris);
   font-weight: 700; font-size: var(--t-s); white-space: nowrap;
@@ -131,8 +136,8 @@ q { quotes: "«\00a0" "\00a0»" "“" "”"; }
   .menu ul { flex-direction: column; gap: 2px; padding-bottom: var(--e-3); }
   .menu a { white-space: normal; font-size: var(--t-m); }
   .marque-logo { width: 38px; height: 38px; }
-  .marque-titre { font-size: var(--t-m); }
-  .marque-sous-titre { font-size: var(--t-xs); }
+  .marque-texte { font-size: var(--t-s); letter-spacing: .05em; }
+  .menu ul { border-top: 0; margin-top: 0; }
 }
 @media (max-width: 480px) {
   .marque-sous-titre { display: none; }
