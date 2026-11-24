@@ -75,6 +75,10 @@ def test_territoires_et_parents():
     assert par.loc['ZE-7505', 'id_parent'] == 'REG-75'
     assert par.loc['FR', 'nb_communes'] == 34875
     assert t[t.niveau == 'Département'].nb_communes.sum() == 34875
+    # un nom par territoire dans chaque niveau (le panneau du rapport choisit par le nom)
+    assert not t.duplicated(['niveau', 'nom']).any()
+    assert par.loc['ZE-0205', 'nom'] != par.loc['ZE-0404', 'nom']
+    assert par.loc['DEP-75', 'nom'] == 'Paris'
     for nom in ['indicateurs', 'besoins_periode', 'series', 'repartitions']:
         assert lire(nom).id.isin(set(t.id)).all(), nom
 
