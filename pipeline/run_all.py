@@ -8,7 +8,8 @@ publie alors rien, si une source reste en échec, si des indicateurs déjà publ
 qu'une source a changé de structure ou de millésime : à vérifier avant publication), si powerbi.py ne trouve pas une
 colonne de sa table de correspondance, ou si un des quatre contours de docs/geo manque (ils sont produits à la main par
 contours.py, une fois par an). Pour accepter des suppressions
-voulues : variable d'environnement ACCEPTER_SUPPRESSIONS=1.
+voulues : les lister dans pipeline/catalogue/suppressions_acceptees.csv (indicateur, date, raison), ce que le robot lit
+aussi ; sur un poste, la variable d'environnement ACCEPTER_SUPPRESSIONS=1 les accepte toutes.
 Sur un poste de travail, une source en échec garde sa dernière sortie valide (cache/sorties). Sur le robot, le cache
 est vide à chaque exécution : une source en échec n'a pas de sortie, d'où l'arrêt sans publication.
 
@@ -59,6 +60,17 @@ def colonnes_publiees():
     return set(pd.read_csv(f, usecols=['colonne'], dtype=str, encoding='utf-8-sig').colonne.dropna())
 
 
+SUPPRESSIONS = Path(__file__).resolve().parent / 'catalogue' / 'suppressions_acceptees.csv'
+
+
+def suppressions_acceptees():
+    """Indicateurs dont la disparition est voulue (source qui ne publie plus une année, par exemple) : listés avec leur date
+    et leur raison dans catalogue/suppressions_acceptees.csv, relu dans la demande de fusion. Les autres disparitions
+    continuent d'arrêter la publication."""
+    if not SUPPRESSIONS.exists(): return set()
+    return set(pd.read_csv(SUPPRESSIONS, dtype=str, encoding='utf-8-sig').indicateur.dropna().str.strip())
+
+
 def resume(r):
     """Compte rendu en Markdown : affiché dans l'onglet Actions de GitHub (résumé de l'exécution) et dans le journal."""
     ok = [m for m in r['modules'] if m['etat'] == 'ok']
@@ -66,11 +78,16 @@ def resume(r):
          f"{len(ok)} source(s) recalculée(s) sur {len(r['modules'])} ; {r['indicateurs']} indicateurs dans la base.", '']
     if r['echecs']:
         l += [f"**Sources en échec** (la base en ligne reste telle quelle) : {', '.join(r['echecs'])}.", '']
-    if r['indicateurs_supprimes']:
-        n = len(r['indicateurs_supprimes'])
-        l += [f"**{n} indicateur(s) publié(s) disparu(s)** : " + ', '.join(r['indicateurs_supprimes'][:40]) + (' ...' if n > 40 else ''), '',
-              "Une source a probablement changé de structure ou de millésime : adapter son script, ou relancer avec "
-              "ACCEPTER_SUPPRESSIONS=1 si la suppression est voulue.", '']
+    acceptes = set(r.get('suppressions_acceptees', []))
+    bloquants = [s for s in r['indicateurs_supprimes'] if s not in acceptes]
+    if bloquants:
+        n = len(bloquants)
+        l += [f"**{n} indicateur(s) publié(s) disparu(s)** : " + ', '.join(bloquants[:40]) + (' ...' if n > 40 else ''), '',
+              "Une source a probablement changé de structure ou de millésime : adapter son script, ou, si la suppression est "
+              "voulue, l'ajouter à pipeline/catalogue/suppressions_acceptees.csv (ou relancer avec ACCEPTER_SUPPRESSIONS=1).", '']
+    if acceptes:
+        l += [f"{len(acceptes)} indicateur(s) retiré(s) volontairement (catalogue/suppressions_acceptees.csv) : "
+              + ', '.join(sorted(acceptes)), '']
     if r.get('powerbi', 'ok') != 'ok':
         l += [f"**Fichiers Power BI non produits** : {r['powerbi']}", '']
     if r.get('contours_manquants'):
@@ -108,11 +125,13 @@ def main():
     echecs = [b['module'] for b in bilan if b['etat'] != 'ok']
     supprimes = sorted(avant - apres) if avant else []
     ajoutes = sorted(apres - avant) if avant else []
+    acceptes = sorted(set(supprimes) & suppressions_acceptees())
+    bloquants = [s for s in supprimes if s not in acceptes]
     publiable = (not echecs and etat_powerbi == 'ok' and not contours_manquants
-                 and (not supprimes or os.environ.get('ACCEPTER_SUPPRESSIONS') == '1'))
+                 and (not bloquants or os.environ.get('ACCEPTER_SUPPRESSIONS') == '1'))
     rapport = {'date': datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='seconds'), 'publiable': publiable,
                'modules': bilan, 'echecs': echecs, 'indicateurs': len(apres),
-               'indicateurs_ajoutes': ajoutes, 'indicateurs_supprimes': supprimes,
+               'indicateurs_ajoutes': ajoutes, 'indicateurs_supprimes': supprimes, 'suppressions_acceptees': acceptes,
                'powerbi': etat_powerbi, 'contours_manquants': contours_manquants}
     with open(PUB / 'derniere_execution.json', 'w', encoding='utf-8') as f:
         json.dump(rapport, f, ensure_ascii=False, indent=1)
