@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
-"""Gares de voyageurs par commune (SNCF Gares & Connexions) : nombre de gares ouvertes aux voyageurs et fréquentation annuelle en 2019 et 2024."""
-import time, shutil, unicodedata, urllib.request
+"""Gares de voyageurs par commune (SNCF Gares & Connexions) : nombre de gares ouvertes aux voyageurs et fréquentation annuelle.
+
+Fréquentation : une colonne par année présente dans le fichier de la SNCF (colonnes total_voyageurs_AAAA). Jusqu'en
+octobre 2026 le fichier donnait 2015 à 2024 (la base gardait 2019 et 2024) ; en novembre 2026 la SNCF l'a remplacé par
+la seule année 2025. Les anciennes colonnes sont listées dans pipeline/catalogue/suppressions_acceptees.csv."""
+import re, time, shutil, unicodedata, urllib.request
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -16,7 +20,7 @@ SOURCE = {'ref': 'E7-23, E7-22',
           'producteur': 'SNCF Gares & Connexions',
           'url': 'https://ressources.data.sncf.com/explore/dataset/gares-de-voyageurs/ ; https://ressources.data.sncf.com/explore/dataset/frequentation-gares/',
           'telechargement': f'{URL_GARES} ; {URL_FREQ}',
-          'millesime': 'référentiel des gares au 1er novembre 2026 ; fréquentation 2019 et 2024',
+          'millesime': 'référentiel des gares au 1er novembre 2026 ; fréquentation : années publiées par la SNCF',
           'licence': 'Licence ouverte 2.0 (Open Licence Etalab)'}
 
 
@@ -76,11 +80,16 @@ def charger(cache: Path) -> list:
     f = f.dropna(subset=['CODGEO'])
     f['CODGEO'] = geo.vers_cog2026(f.CODGEO).values
     f = f.dropna(subset=['CODGEO'])
-    for a in ('2019', '2024'):
+    # années de fréquentation présentes dans le fichier (total_voyageurs_2025 ; pas total_voyageurs_non_voyageurs_2025)
+    annees = sorted(m.group(1) for c in f.columns if (m := re.fullmatch(r'total_voyageurs_(\d{4})', c)))
+    if not annees:
+        raise ValueError('fichier de fréquentation SNCF sans colonne total_voyageurs_AAAA : colonnes ' + ', '.join(f.columns))
+    for a in annees:
         f[a] = pd.to_numeric(f[f'total_voyageurs_{a}'], errors='coerce')
-    v = f.groupby('CODGEO')[['2019', '2024']].sum(min_count=1)
-    v.columns = ['gares_voyageurs_2019', 'gares_voyageurs_2024']
+    v = f.groupby('CODGEO')[annees].sum(min_count=1)
+    v.columns = [f'gares_voyageurs_{a}' for a in annees]
     out = out.join(v, how='outer')
+    SOURCE['millesime'] = f"référentiel des gares au 1er novembre {AN_REF} ; fréquentation {', '.join(annees)}"
     for c in [c for c in out.columns if c.startswith('gares_nb')]:
         out[c] = out[c].fillna(0)        # commune où une gare a encore de la fréquentation mais ne figure plus au référentiel
     out = out.reset_index().rename(columns={'index': 'CODGEO'})
@@ -101,11 +110,12 @@ def charger(cache: Path) -> list:
          'agregation': 'somme', 'annee': AN_REF},
         {'col': f'gares_nb_segment_c_{AN_REF}', 'libelle': f"Gares de voyageurs d'intérêt local (segment C) en {AN_REF}", 'unite': 'gares',
          'definition': "Nombre de gares du segment C (gares et haltes d'intérêt local)." + ref, 'agregation': 'somme', 'annee': AN_REF},
-        {'col': 'gares_voyageurs_2019', 'libelle': 'Voyageurs dans les gares en 2019', 'unite': 'voyageurs par an',
-         'definition': "Nombre annuel de voyageurs des gares de la commune en 2019 (année de référence avant la crise sanitaire)." + freq,
-         'agregation': 'somme', 'annee': '2019'},
-        {'col': 'gares_voyageurs_2024', 'libelle': 'Voyageurs dans les gares en 2024', 'unite': 'voyageurs par an',
-         'definition': "Nombre annuel de voyageurs des gares de la commune en 2024." + freq, 'agregation': 'somme', 'annee': '2024'},
+    ] + [
+        {'col': f'gares_voyageurs_{a}', 'libelle': f'Voyageurs dans les gares en {a}', 'unite': 'voyageurs par an',
+         'definition': f"Nombre annuel de voyageurs des gares de la commune en {a}"
+                       + (" (année de référence avant la crise sanitaire)" if a == '2019' else '') + "." + freq,
+         'agregation': 'somme', 'annee': a}
+        for a in annees
     ]
     out = out[['CODGEO'] + [x['col'] for x in ind]]
     return [{'theme': 'equipements', 'data': out, 'indicateurs': ind}]
