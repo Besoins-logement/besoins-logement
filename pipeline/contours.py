@@ -45,10 +45,10 @@ TAILLE_MAX_EPCI = 1_000_000   # octets
 
 # Encarts d'outre-mer, de haut en bas, dans une colonne à l'ouest de la métropole (coordonnées de Mercator, en degrés)
 ENCARTS = ['971', '972', '973', '974', '976']
-COLONNE_X = -8.3          # centre de la colonne (longitude)
-HAUT_Y = 51.0             # latitude du haut de la colonne
-CASE = 2.25               # taille d'une case (unités de Mercator, environ des degrés)
-ECART = 0.55
+COLONNE_X = -6.3          # centre de la colonne (longitude), dans le golfe de Gascogne, à l'ouest de la pointe bretonne
+HAUT_Y = 48.6             # latitude du haut de la colonne
+CASE = 1.6                # taille d'une case (unités de Mercator, environ des degrés) ; 2,25 jusqu'au 24 novembre 2026 :
+ECART = 0.45              # encarts trop grands à côté de la métropole dans le rapport
 
 
 def telecharger():

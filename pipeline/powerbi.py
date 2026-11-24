@@ -310,6 +310,25 @@ def ident(niveau, code):
     return 'FR' if pre == 'FR' else f'{pre}-{code}'
 
 
+def noms_uniques(out):
+    """Rend chaque nom unique dans son niveau : le panneau du rapport choisit un territoire par son nom, et deux homonymes
+    (zones d'emploi « Le Sud » de Martinique et de La Réunion, EPCI « des Deux Vallées » de l'Oise et de l'Essonne...)
+    seraient choisis ensemble, chiffres vides. Précision ajoutée entre parenthèses : département pour un EPCI, région pour
+    une zone d'emploi, code en dernier recours. Les noms de niveaux différents (Paris département et zone d'emploi) restent."""
+    for niveau, g in out.groupby('niveau'):
+        doubles = g[g.nom.duplicated(keep=False)]
+        if doubles.empty:
+            continue
+        precision = doubles.nom_departement if niveau == 'EPCI' else doubles.nom_region
+        precision = precision.fillna(doubles.code)
+        if (doubles.nom + precision).duplicated().any():
+            precision = doubles.code
+        out.loc[doubles.index, 'nom'] = doubles.nom + ' (' + precision + ')'
+    doubles = out[out.duplicated(['niveau', 'nom'], keep=False)]
+    if not doubles.empty:
+        raise ErreurPowerBI('noms de territoire en double dans un niveau : ' + ', '.join(doubles.nom.head(10)))
+
+
 def table_territoires():
     t = pd.read_parquet(PUB / 'territoires.parquet')
     com = t[t.niveau == 'Commune']
@@ -320,7 +339,6 @@ def table_territoires():
     t.loc[(t.niveau == 'EPCI') & (t.code == 'ZZZZZZZZZ'), 'nom'] = 'Communes sans EPCI (quatre îles)'
     out = pd.DataFrame({'id': [ident(n, c) for n, c in zip(t.niveau, t.code)], 'niveau': t.niveau.values,
                         'ordre_niveau': t.niveau.map(lambda n: NIVEAUX[n][1]).values, 'code': t.code.values, 'nom': t.nom.values})
-    out['nom_affiche'] = [nm if n == 'France' else f'{nm} ({NIVEAUX[n][2]})' for nm, n in zip(out.nom, out.niveau)]
     reg = t.reg.where(t.niveau != 'Région', t.code).values
     dep = t.dep.where(t.niveau != 'Département', t.code).values
     out['id_region'] = ['REG-' + r if isinstance(r, str) else None for r in reg]
@@ -330,6 +348,9 @@ def table_territoires():
     out['nom_departement'] = [noms_dep.get(d) if isinstance(d, str) else None for d in dep]
     out.loc[out.niveau.isin(['France', 'Région']), ['id_departement', 'nom_departement']] = None
     out.loc[out.niveau == 'France', ['id_region', 'nom_region']] = None
+    noms_uniques(out)
+    out.insert(out.columns.get_loc('nom') + 1, 'nom_affiche',   # colonne juste après nom, comme avant (ordre publié stable)
+               [nm if n == 'France' else f'{nm} ({NIVEAUX[n][2]})' for nm, n in zip(out.nom, out.niveau)])
     # parent de comparaison : France pour une région, région pour un département ou une zone d'emploi, département pour un EPCI
     regle = {'France': None, 'Région': 'FR', 'Département': 'id_region', "Zone d'emploi": 'id_region', 'EPCI': 'id_departement'}
     out['id_parent'] = [None if regle[n] is None else ('FR' if regle[n] == 'FR' else r[regle[n]]) for n, (_, r) in zip(out.niveau, out.iterrows())]
