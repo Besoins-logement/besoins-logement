@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 """Recalcule toute la base : exécute chaque module de pipeline/sources (sauf ceux dont le nom commence par _),
-enregistre ses sorties dans cache/sorties, assemble docs/data, puis régénère COLLECTE.md.
+enregistre ses sorties dans cache/sorties, assemble docs/data, produit les fichiers du rapport Power BI (docs/data/powerbi,
+par powerbi.py), puis régénère COLLECTE.md.
 
 Une source en échec est relancée une fois. Garde-fous : le programme s'arrête en erreur (code 1), et le robot ne
-publie alors rien, si une source reste en échec ou si des indicateurs déjà publiés disparaissent de la base (signe
-qu'une source a changé de structure ou de millésime : à vérifier avant publication). Pour accepter des suppressions
+publie alors rien, si une source reste en échec, si des indicateurs déjà publiés disparaissent de la base (signe
+qu'une source a changé de structure ou de millésime : à vérifier avant publication), si powerbi.py ne trouve pas une
+colonne de sa table de correspondance, ou si un des quatre contours de docs/geo manque (ils sont produits à la main par
+contours.py, une fois par an). Pour accepter des suppressions
 voulues : variable d'environnement ACCEPTER_SUPPRESSIONS=1.
 Sur un poste de travail, une source en échec garde sa dernière sortie valide (cache/sorties). Sur le robot, le cache
 est vide à chaque exécution : une source en échec n'a pas de sortie, d'où l'arrêt sans publication.
@@ -14,9 +17,11 @@ import os, re, sys, json, time, importlib, traceback, datetime
 from pathlib import Path
 import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import geo, assembler, collecte
+import geo, assembler, collecte, powerbi
 
 PUB = geo.RACINE / 'docs' / 'data'
+GEO = geo.RACINE / 'docs' / 'geo'
+CONTOURS = ['regions', 'departements', 'zones_emploi', 'epci']   # docs/geo/<nom>.topojson, faits par contours.py
 PAUSE_AVANT_RELANCE = 60          # secondes entre l'échec d'une source et son second essai
 
 
@@ -66,6 +71,11 @@ def resume(r):
         l += [f"**{n} indicateur(s) publié(s) disparu(s)** : " + ', '.join(r['indicateurs_supprimes'][:40]) + (' ...' if n > 40 else ''), '',
               "Une source a probablement changé de structure ou de millésime : adapter son script, ou relancer avec "
               "ACCEPTER_SUPPRESSIONS=1 si la suppression est voulue.", '']
+    if r.get('powerbi', 'ok') != 'ok':
+        l += [f"**Fichiers Power BI non produits** : {r['powerbi']}", '']
+    if r.get('contours_manquants'):
+        l += ["**Contours manquants dans docs/geo** : " + ', '.join(r['contours_manquants'])
+              + " (les produire avec `python pipeline/contours.py`).", '']
     if r['indicateurs_ajoutes']:
         n = len(r['indicateurs_ajoutes'])
         l += [f"{n} indicateur(s) nouveau(x) : " + ', '.join(r['indicateurs_ajoutes'][:40]) + (' ...' if n > 40 else ''), '']
@@ -89,14 +99,21 @@ def main():
             time.sleep(PAUSE_AVANT_RELANCE)
             r = tenter(b['module']); r['essais'] = 2; bilan[i] = r; print(r, flush=True)
     assembler.main()
+    try:
+        powerbi.main(); etat_powerbi = 'ok'
+    except Exception as e:
+        traceback.print_exc(); etat_powerbi = str(e)[:500]
+    contours_manquants = [f'{n}.topojson' for n in CONTOURS if not (GEO / f'{n}.topojson').exists()]
     apres = colonnes_publiees()
     echecs = [b['module'] for b in bilan if b['etat'] != 'ok']
     supprimes = sorted(avant - apres) if avant else []
     ajoutes = sorted(apres - avant) if avant else []
-    publiable = not echecs and (not supprimes or os.environ.get('ACCEPTER_SUPPRESSIONS') == '1')
+    publiable = (not echecs and etat_powerbi == 'ok' and not contours_manquants
+                 and (not supprimes or os.environ.get('ACCEPTER_SUPPRESSIONS') == '1'))
     rapport = {'date': datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='seconds'), 'publiable': publiable,
                'modules': bilan, 'echecs': echecs, 'indicateurs': len(apres),
-               'indicateurs_ajoutes': ajoutes, 'indicateurs_supprimes': supprimes}
+               'indicateurs_ajoutes': ajoutes, 'indicateurs_supprimes': supprimes,
+               'powerbi': etat_powerbi, 'contours_manquants': contours_manquants}
     with open(PUB / 'derniere_execution.json', 'w', encoding='utf-8') as f:
         json.dump(rapport, f, ensure_ascii=False, indent=1)
     collecte.main()
