@@ -1,5 +1,5 @@
 {
- "mise_a_jour": "2026-11-04",
+ "mise_a_jour": "2026-11-24",
  "geographie": "COG 2026 (34 875 communes)",
  "themes": {
   "territoire": {
@@ -60,7 +60,7 @@
   "equipements": {
    "libelle": "Équipements et services",
    "fichier": "equipements.parquet",
-   "indicateurs": 342
+   "indicateurs": 341
   },
   "risques_energie": {
    "libelle": "Risques, climat et énergie",
@@ -77,6 +77,6 @@
   "Territoire d'industrie",
   "Commune"
  ],
- "indicateurs": 2453,
+ "indicateurs": 2452,
  "territoires": 36738
 }

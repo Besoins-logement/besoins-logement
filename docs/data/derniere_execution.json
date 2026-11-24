@@ -1,18 +1,18 @@
 {
- "date": "2026-11-04T16:33:03+00:00",
+ "date": "2026-11-24T16:13:42+00:00",
  "publiable": true,
  "modules": [
   {
    "module": "aav",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 33
+   "secondes": 32
   },
   {
    "module": "accueil_enfant",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 4
+   "secondes": 5
   },
   {
    "module": "apl",
@@ -24,31 +24,31 @@
    "module": "besoins_sdes",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 374
+   "secondes": 371
   },
   {
    "module": "caf",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 11
+   "secondes": 17
   },
   {
    "module": "catnat",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 11
+   "secondes": 10
   },
   {
    "module": "copro",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 9
+   "secondes": 5
   },
   {
    "module": "densite",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 5
+   "secondes": 6
   },
   {
    "module": "dispositifs_anct",
@@ -60,43 +60,43 @@
    "module": "dpe",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 82
+   "secondes": 116
   },
   {
    "module": "dvf_stats",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 17
+   "secondes": 13
   },
   {
    "module": "economie_insee",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 553
+   "secondes": 599
   },
   {
    "module": "energie_conso",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 8
+   "secondes": 14
   },
   {
    "module": "equipements_insee",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 48
+   "secondes": 45
   },
   {
    "module": "filosofi",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 78
+   "secondes": 87
   },
   {
    "module": "france_travail",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 13
+   "secondes": 15
   },
   {
    "module": "gares",
@@ -108,7 +108,7 @@
    "module": "ircom",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 5
+   "secondes": 4
   },
   {
    "module": "lovac",
@@ -120,13 +120,13 @@
    "module": "loyers",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 8
+   "secondes": 13
   },
   {
    "module": "ptz",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 34
+   "secondes": 24
   },
   {
    "module": "qpv",
@@ -138,37 +138,37 @@
    "module": "rp_emploi",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 659
+   "secondes": 736
   },
   {
    "module": "rp_logement",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 387
+   "secondes": 443
   },
   {
    "module": "rp_menages",
    "etat": "ok",
    "blocs": 2,
-   "secondes": 448
+   "secondes": 501
   },
   {
    "module": "rp_population",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 191
+   "secondes": 217
   },
   {
    "module": "rpls",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 1254
+   "secondes": 1383
   },
   {
    "module": "sitadel",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 50
+   "secondes": 53
   },
   {
    "module": "sru",
@@ -192,7 +192,7 @@
    "module": "urssaf",
    "etat": "ok",
    "blocs": 1,
-   "secondes": 27
+   "secondes": 32
   },
   {
    "module": "zonage_abc",
@@ -214,7 +214,18 @@
   }
  ],
  "echecs": [],
- "indicateurs": 2453,
- "indicateurs_ajoutes": [],
- "indicateurs_supprimes": []
+ "indicateurs": 2452,
+ "indicateurs_ajoutes": [
+  "gares_voyageurs_2025"
+ ],
+ "indicateurs_supprimes": [
+  "gares_voyageurs_2019",
+  "gares_voyageurs_2024"
+ ],
+ "suppressions_acceptees": [
+  "gares_voyageurs_2019",
+  "gares_voyageurs_2024"
+ ],
+ "powerbi": "ok",
+ "contours_manquants": []
 }
